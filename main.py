@@ -29,7 +29,7 @@ def validate_input(input_text):
     (?P<rules>(?:\[\w+\]:\s*\w+\s*<-?\s*(?:\w+(?:,\s*)?)*\s*)+)  # [r1]: p <- q,a
     PREF:\s*(?P<PREF>\w+)\s*>\s*(?P<other>\w+)  # PREF: a > b
     '''
-
+    input_text = re.sub(r'\s+', '', input_text)
     match = re.match(pattern, input_text, re.VERBOSE)
 
     # Débogage : afficher l'entrée et le match
@@ -153,34 +153,37 @@ def options(user_input):
             session['result'] = result
         elif action == 'auto_convert_non_circular':
             aba = ABA.ABA(L, R, A)
-            NewR, NewL = aba.CircularToNonCircular()
+            aba.circularToNonCircular()
             NewR1 = []
             NewL1 = []
             # #print("NewR : ",NewR)
-            # for i in NewR:
-            #     print("type(i) : ",type(i))
-            #     # if isinstance(i, list) :
-            #     #     for j in i :
-            #     #         print("Ruel Rida2 : ", j.display())
-            #     #         NewR1.append(j.display())
-            #     # else:
-            #     #     print("Ruel Rida : ", i.display())
-            #     #     NewR1.append(i.display())
-            #
-            # for i in NewL:
-            #     if isinstance(i, list):
-            #         for j in i:
-            #             NewL1.append(j.display())
-            #     else:
-            #         NewL1.append(i.display())
+            for i in R:
+                # print("type(i) : ",type(i))
+                # if isinstance(i, list) :
+                #     for j in i :
+                #         print("Ruel Rida2 : ", j.display())
+                #         NewR1.append(j.display())
+                # else:
+                #     print("Ruel Rida : ", i.display())
+                    NewR1.append(i.display())
 
-            result = [NewR, NewL]
+            for i in L:
+                # if isinstance(i, list):
+                #     for j in i:
+                #         NewL1.append(j.display())
+                # else:
+                    NewL1.append(i.display())
+            liste3=[]
+            liste3.append("3")
+            result = [NewL1,NewR1,liste3]
 
             session['result'] = result
         elif action == 'auto_convert_atomic':
             aba = ABA.ABA(L, R, A)
             liste1, liste2, liste3 = aba.toAtomic()
-            result = [liste1, liste2, liste3]
+            liste4 = []
+            liste4.append("4")
+            result = [liste1, liste2, liste3,liste4]
             session['result'] = result
         elif action == 'handle_preferences_assumptions':
             PREF = PREF.split('>')
@@ -196,7 +199,6 @@ def options(user_input):
             b = Literal.Literal(PREF[1].strip())
             pref = Preferences([a], [b])
             normal, reverse = generate_normal_reverse_attacks(A, pref, R)
-
             print("Normal Attacks")
             lisenormal = [i.display() for i in normal]
             lisereverse = [i.display() for i in reverse]
