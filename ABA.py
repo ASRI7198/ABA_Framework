@@ -1,4 +1,4 @@
-import Literal
+    import Literal
 import Rule
 
 
@@ -17,85 +17,67 @@ class ABA():
 
     """  ABA (L,R,A;-)  """
 
-    def CircularToNonCircular(self):
+    def circularToNonCircular(self):
+        """ Converts a circular ABA framework to a non-circular one """
         k = len(self.L) - len(self.A.list_literals)  # Number of non-assumption literals
-        # print("Number of non-assumption literals : ",k)
         temp_R = []
         temp_L = []
         for r in self.R:
 
             # Handle atomic rules (conclusion is an assumption)
             if self.isAtomic(r):
-                # print("Atomic rule : ",r.display())
 
                 for i in range(1, k + 1):
                     if i != k:  # Skip the final rule as s^k = s (no need to rename)
                         # Create new literals with modified names for non-assumptions
                         new_lit = Literal.Literal(f"{r.conclusion.name}_{i}", r.conclusion.is_negation)
-                        # print('New literal: ', new_lit.display())
                         temp_L.append(new_lit)
+
                         # Create the new rule with updated literals
                         r_new = Rule.Rule(f"{r.name}_{i}", r.body, new_lit)
-                        # print('New rule: ', r_new.display())
 
                         temp_R.append(r_new)
 
-
-
             # Handle non-atomic rules (conclusion is NOT an assumption)
             else:
-                #    print("Non-Atomic rule : ",r.display())
                 for i in range(2, k + 1):  # Start at 2, since we don't modify r_1
 
                     new_literals = []  # store the body elements of the current rule
                     for b in [r.body]:
-                        if isinstance(b, list):
-                            for bc in b:
-                                if bc in self.A.list_literals:  # If b is an assumption, keep it
-                                    new_literals.append(b)
-                                else:  # If b is not an assumption, modify its name
-                                    new_lit = Literal.Literal(f"{bc.name}_{i - 1}", bc.is_negation)
+                        if b in self.A.list_literals:  # If b is an assumption, keep it
+                            new_literals.append(b)
+                        else:  # If b is not an assumption, modify its name
+                            if isinstance(b,list):
+                                for nb in b:
+                                    new_lit = Literal.Literal(f"{nb.name}_{i - 1}", nb.is_negation)
                                     new_literals.append(new_lit)
                                     temp_L.append(new_lit)  # add the new litteral to L
+                            else:
+                                new_lit = Literal.Literal(f"{b.name}_{i - 1}", b.is_negation)
+                                new_literals.append(new_lit)
+                                temp_L.append(new_lit)  # add the new litteral to L
+
                     if i != k:
                         # Create the new rule with updated literals and conclusion
                         r_temp = Rule.Rule(f"{r.name}_{i}", new_literals,
-                                           Literal.Literal(f"{r.conclusion.name}_{i}", r.conclusion.is_negation))
+                                      Literal.Literal(f"{r.conclusion.name}_{i}", r.conclusion.is_negation))
 
                     else:
                         r_temp = Rule.Rule(f"{r.name}_{i}", new_literals,
-                                           Literal.Literal(f"{r.conclusion.name}", r.conclusion.is_negation))
+                                      Literal.Literal(f"{r.conclusion.name}", r.conclusion.is_negation))
 
                     temp_R.append(r_temp)
 
         # extend  L with the new literals created in the loop
         existing = [l.name for l in self.L]  # Keep track of the elements already in self.L
-        #print(existing)
 
         for i in range(len(temp_L)):
             if temp_L[i].name not in existing:
-                # print('in')
                 self.L.append(temp_L[i])
                 existing.append(temp_L[i].name)
 
         # extend R with the new rules
-        listeR = []
-        for rule in self.R:
-            print("rule : ",rule)
-            listeR.append(rule.display())
-
-        for rule in temp_R:
-
-            print("rule : ", rule)
-            listeR.append(rule.display_2())
-
         self.R.extend(temp_R)
-
-        listeL=[]
-
-        for l in self.L:
-            listeL.append(l.display())
-        return listeR ,listeL
 
     def toAtomic(self):
         # self.cont = A.list_contraries
