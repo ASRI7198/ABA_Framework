@@ -1,6 +1,6 @@
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -50,12 +50,12 @@
     <div class="result-container">
         <h1>Résultats</h1>
 
-         {% if result|length == 3 and result[0] is iterable and result[1] is iterable and result[2] is iterable %}
+         {% if result|length == 4%}
             <!-- Afficher chaque élément dans les trois sous-listes -->
             <h2>New A et New L</h2>
             <ol>
                 {% for item in result[0] %}
-                    {{ item }}<br>
+                    {{ item }}
                 {% else %}
                     <li>Aucune donnée disponible pour la Liste 1</li>
                 {% endfor %}
@@ -78,7 +78,7 @@
                     <li>Aucune donnée disponible pour la Liste 3</li>
                 {% endfor %}
             </ol>
-        {% elif result|length == 2 and result[0] is iterable and result[1] is iterable%}
+        {% elif result|length == 2%}
            <h2>Normal Attacks</h2>
             <ol>
                 {% for item in result[0] %}
@@ -88,6 +88,24 @@
                 {% endfor %}
             </ol>
             <h2>Reverse Attacks</h2>
+            <ol>
+                {% for item in result[1] %}
+                    {{ item }}<br>
+                {% else %}
+                    <li>Aucune donnée disponible pour la Liste 3</li>
+                {% endfor %}
+            </ol>
+
+        {% elif result|length == 3%}
+           <h2>New L</h2>
+            <ol>[
+                {% for item in result[0] %}
+                    {{ item }} ,
+                {% else %}
+                    <li>Aucune donnée disponible pour la Liste 1</li>
+                ]{% endfor %}
+            </ol>
+            <h2>New R</h2>
             <ol>
                 {% for item in result[1] %}
                     {{ item }}<br>
