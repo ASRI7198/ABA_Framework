@@ -1,4 +1,4 @@
-    import Literal
+import Literal
 import Rule
 
 
