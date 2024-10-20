@@ -1,0 +1,110 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Result</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            font-size: 24px;
+        }
+
+        .result-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            min-width: 500px; /* Change max-width to min-width */
+            width: auto; /* Allow width to grow */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-height: 70vh; /* Limit height for larger content */
+            overflow-y: auto; /* Enable vertical scrolling if needed */
+        }
+
+        p {
+            font-size: 18px;
+            color: #555;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="result-container">
+        <h1>Résultats</h1>
+
+         {% if result|length == 3 and result[0] is iterable and result[1] is iterable and result[2] is iterable %}
+            <!-- Afficher chaque élément dans les trois sous-listes -->
+            <h2>New A et New L</h2>
+            <ol>
+                {% for item in result[0] %}
+                    {{ item }}<br>
+                {% else %}
+                    <li>Aucune donnée disponible pour la Liste 1</li>
+                {% endfor %}
+            </ol>
+
+            <h2>New contraries</h2>
+            <ol>
+                {% for item in result[1] %}
+                    {{ item }}<br>
+                {% else %}
+                    <li>Aucune donnée disponible pour la Liste 2</li>
+                {% endfor %}
+            </ol>
+
+            <h2>New R</h2>
+            <ol>
+                {% for item in result[2] %}
+                    {{ item }}<br>
+                {% else %}
+                    <li>Aucune donnée disponible pour la Liste 3</li>
+                {% endfor %}
+            </ol>
+        {% elif result|length == 2 and result[0] is iterable and result[1] is iterable%}
+           <h2>Normal Attacks</h2>
+            <ol>
+                {% for item in result[0] %}
+                    {{ item }}<br>
+                {% else %}
+                    <li>Aucune donnée disponible pour la Liste 1</li>
+                {% endfor %}
+            </ol>
+            <h2>Reverse Attacks</h2>
+            <ol>
+                {% for item in result[1] %}
+                    {{ item }}<br>
+                {% else %}
+                    <li>Aucune donnée disponible pour la Liste 3</li>
+                {% endfor %}
+            </ol>
+
+        {% else %}
+            <!-- Afficher une liste simple si result n'est pas une liste de trois listes -->
+            <ol>
+                {% for i in result %}
+                    {{ i }}<br>
+                {% endfor %}
+            </ol>
+        {% endif %}
+    </div>
+</body>
+</html>
+
